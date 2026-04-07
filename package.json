@@ -1,5 +1,5 @@
 {
-  "name": "tcgen",
+  "name": "@sirojar/tcgen",
   "version": "0.1.0",
   "description": "AI-powered test case generator from git commits",
   "type": "module",

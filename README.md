@@ -1,11 +1,17 @@
 # tcgen
 
+[![npm version](https://img.shields.io/npm/v/@sirojar/tcgen.svg)](https://www.npmjs.com/package/@sirojar/tcgen)
+
 AI-powered test case generator from git commits. Reads your commit diffs, combines them with a customizable prompt template, and uses Claude or Gemini to generate structured test cases as JSON.
 
 ## Install
 
 ```bash
-npm install -g tcgen
+# Global install
+npm install -g @sirojar/tcgen
+
+# Or run directly with npx (no install needed)
+npx @sirojar/tcgen --help
 ```
 
 ## Quick Start
@@ -20,6 +26,10 @@ ANTHROPIC_API_KEY=sk-... tcgen generate --all
 
 # Generate test cases (Gemini)
 GEMINI_API_KEY=... tcgen generate --all --provider gemini
+
+# Or use npx without installing
+npx @sirojar/tcgen init
+ANTHROPIC_API_KEY=sk-... npx @sirojar/tcgen generate --all
 ```
 
 ## Commands
