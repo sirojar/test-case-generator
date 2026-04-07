@@ -63,7 +63,7 @@ export async function getCommitRange(
   }
 
   // No "from" means get all commits up to "to"
-  const log = await g.log({ to });
+  const log = await g.log([to]);
   return log.all.map((c) => ({
     hash: c.hash,
     message: c.message,
@@ -82,11 +82,8 @@ export async function getDiff(
   if (from) {
     diff = await g.diff([from, to]);
   } else {
-    // Get diff of the entire tree up to "to" (first run with --all)
-    diff = await g.diff([`${to}~1`, to]).catch(async () => {
-      // If there's only one commit, show the full tree
-      return await g.show([to, "--format="]);
-    });
+    // No "from" — show full tree diff from root
+    diff = await g.raw(["diff-tree", "-p", "--root", to]);
   }
 
   if (diff.length > MAX_DIFF_CHARS) {

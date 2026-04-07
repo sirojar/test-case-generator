@@ -33,11 +33,14 @@ export interface StateFile {
   lastRunAt: string;
 }
 
+export type Provider = "claude" | "gemini";
+
 export interface RunConfig {
   fromCommit: string | null;
   toCommit: string;
   outputDir: string;
   promptFile: string;
+  provider: Provider;
   model: string;
   dryRun: boolean;
   all: boolean;

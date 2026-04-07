@@ -15,7 +15,12 @@ import {
 import { loadTemplate, buildPrompt } from "./prompt.js";
 import { generateTestCases } from "./ai.js";
 import { writeTestCases } from "./output.js";
-import type { RunConfig } from "./types.js";
+import type { Provider, RunConfig } from "./types.js";
+
+const DEFAULT_MODELS: Record<Provider, string> = {
+  claude: "claude-sonnet-4-20250514",
+  gemini: "gemini-2.0-flash",
+};
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -58,10 +63,20 @@ program
   .option("--all", "Process all commits from the beginning", false)
   .option("--output <dir>", "Output directory", "test-cases")
   .option("--prompt <file>", "Prompt template file", "prompt-template.md")
-  .option("--model <model>", "Claude model to use", "claude-sonnet-4-20250514")
+  .option("--provider <provider>", "AI provider: claude or gemini", "claude")
+  .option("--model <model>", "Model to use (defaults per provider)")
   .option("--dry-run", "Preview prompt without calling AI", false)
   .action(async (opts) => {
     await ensureGitRepo();
+
+    // Validate provider
+    const provider = opts.provider as Provider;
+    if (provider !== "claude" && provider !== "gemini") {
+      console.error(`Error: Unknown provider "${opts.provider}". Use "claude" or "gemini".`);
+      process.exit(1);
+    }
+
+    const model = opts.model || DEFAULT_MODELS[provider];
 
     // Resolve from-commit
     let fromCommit: string | null = opts.from || null;
@@ -82,7 +97,8 @@ program
       toCommit: opts.to,
       outputDir: opts.output,
       promptFile: opts.prompt,
-      model: opts.model,
+      provider,
+      model,
       dryRun: opts.dryRun,
       all: opts.all,
     };
@@ -120,8 +136,8 @@ program
     }
 
     // Call AI
-    console.log(`Generating test cases with ${config.model}...`);
-    const testCases = await generateTestCases(prompt, config.model);
+    console.log(`Generating test cases with ${config.provider}/${config.model}...`);
+    const testCases = await generateTestCases(prompt, config.provider, config.model);
 
     if (testCases.length === 0) {
       console.log("AI returned no test cases (changes may be trivial).");
