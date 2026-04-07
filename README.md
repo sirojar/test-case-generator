@@ -75,10 +75,10 @@ Default model: `claude-sonnet-4-20250514`
 
 ```bash
 GEMINI_API_KEY=... tcgen generate --all --provider gemini
-GEMINI_API_KEY=... tcgen generate --all --provider gemini --model gemini-2.0-flash
+GEMINI_API_KEY=... tcgen generate --all --provider gemini --model gemini-2.5-flash
 ```
 
-Default model: `gemini-2.0-flash`
+Default model: `gemini-2.5-flash`
 
 ## Prompt Template
 

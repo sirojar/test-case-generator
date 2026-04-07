@@ -19,7 +19,7 @@ import type { Provider, RunConfig } from "./types.js";
 
 const DEFAULT_MODELS: Record<Provider, string> = {
   claude: "claude-sonnet-4-20250514",
-  gemini: "gemini-2.0-flash",
+  gemini: "gemini-2.5-flash",
 };
 
 const __filename = fileURLToPath(import.meta.url);
